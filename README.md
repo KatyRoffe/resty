@@ -2,7 +2,7 @@
 
 Author: Katy Roffe
 
-Deployment:
+Deployment: [https://kroffe-resty.netlify.app/](https://kroffe-resty.netlify.app/)
 
 ## Phase 1
 
