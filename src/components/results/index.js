@@ -3,7 +3,7 @@ import React from 'react';
 function Results(props) {
   return (
     <section>
-      <pre>{props.data ? JSON.stringify(props.data, undefined, 2) : null}</pre>
+      <input data-testid="name" value={props.data ? JSON.stringify(props.data, undefined, 2) : ''} />
     </section>
   );
 }
