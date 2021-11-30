@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './app.scss';
 
 import Header from './components/header';
@@ -7,17 +7,28 @@ import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
 
-function App() {
 
+function App() {
   const [data, setData] = useState({});
   const [requestParams, setRequestParams] = useState({})
+
+  useEffect(() => {
+    console.log('😎 use effect triggered', data)
+    if (data.results) {
+      axios.get(data.results[0].url)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => console.error(err))
+    }
+  });
 
   const callApi = (requestParams) => {
     let data2 = {
       count: 2,
       results: [
-        { name: 'item1', url: 'http://what.com/1' },
-        { name: 'item2', url: 'http://what.com/2' },
+        { name: 'fake thing 1', url: 'https://pokeapi.co/api/v2/pokemon/' },
+        { name: 'fake thing 2', url: 'http://fakethings.com/2' },
       ],
     };
 
