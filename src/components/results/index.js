@@ -1,9 +1,13 @@
 import React from 'react';
+import ReactJson from 'react-json-view';
 
-function Results(props) {
+const Results = (props) => {
   return (
-    <section>
-      <input data-testid="name" value={props.data ? JSON.stringify(props.data, undefined, 2) : ''} />
+  <section>
+    <pre data-testid="data">
+      {props.data 
+      ? <ReactJson src={props.data} theme="embers" />
+      : <p>Loading...</p>}</pre>
     </section>
   );
 }
