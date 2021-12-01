@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import './form.scss';
 
-function Form(props) {
+function Form({ setRequestParams }) {
 
   let [method, setMethod] = useState('');
   let [url, setUrl] = useState('');
@@ -23,7 +23,12 @@ function Form(props) {
       method,
       url,
     };
-    props.handleApiCall(formData);
+
+    const action = {
+      type: 'UPDATEREQUESTPARAMS',
+      payload: formData,
+    }
+    setRequestParams(action);
   }
 
   return (
