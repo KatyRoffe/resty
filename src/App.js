@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import axios from 'axios';
 import './app.scss';
 
@@ -7,42 +7,53 @@ import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
 
+const initialState = {
+  data: {},
+  requestParams: {},
+  history: [],
+  isLoading: false,
+}
+
+function reducer(state = initialState, action) {
+
+  switch (action.type) {
+    case 'UPDATEREQUESTPARAMS':
+      return { ...state, requestParams: { ...action.payload } };
+
+    case 'ASSIGNDATA':
+      return { ...state, data: { ...action.payload } };
+
+    case 'HISTORY':
+      return { ...state, data: [...action.payload] };
+
+    default:
+      return state;
+  };
+}
 
 function App() {
-  const [data, setData] = useState({});
-  const [requestParams, setRequestParams] = useState({})
-
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const callApi = async (requestParamsObject) => {
+    
+    const response = await axios(requestParamsObject);
+    const action = {
+      type: 'ASSIGN_DATA',
+      payload: response,
+    };
+    dispatch(action);
+  }
   useEffect(() => {
-    console.log('😎 use effect triggered', data)
-    if (data.results) {
-      axios.get(data.results[0].url)
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(err => console.error(err))
+    if (state !== {}) {
+      callApi(state.requestParams);
     }
   });
-
-  const callApi = (requestParams) => {
-    let data2 = {
-      count: 2,
-      results: [
-        { name: 'fake thing 1', url: 'https://pokeapi.co/api/v2/pokemon/' },
-        { name: 'fake thing 2', url: 'http://fakethings.com/2' },
-      ],
-    };
-
-    setData(data2);
-    setRequestParams(requestParams);
-  }
-
   return (
     <React.Fragment>
       <Header />
-      <div>Request Method: {requestParams.method}</div>
-      <div>URL: {requestParams.url}</div>
-      <Form handleApiCall={callApi} />
-      <Results data={data} />
+      <div>Request Method: {state.requestParams.method}</div>
+      <div>URL: {state.requestParams.url}</div>
+      <Form setRequestParams={dispatch} />
+      <Results data={state.data} />
       <Footer />
     </React.Fragment>
   );
